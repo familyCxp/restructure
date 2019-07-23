@@ -1,7 +1,7 @@
 var plays_json = '{ "hamlet"  : {\"name\" : \"Hamlet\" , \"type\" : \"tragedy\"} , ' +
                    '  "as-like" : {\"name\" : \"As You Like It\" , \"type\" : \"comedy\"} , ' +
                    '  "othello" : {\"name\" : \"Othello\" , \"type\" : \"tragedy\"} } ';
-var invoice = JSON.parse(invoice_json);
+
 
 var invoice_json = '{ "customer" : "BigCo" , ' +
                    '  "performances" : [ ' +
@@ -9,6 +9,7 @@ var invoice_json = '{ "customer" : "BigCo" , ' +
                                         '{ \"palyID\" : \"as-like\" , \"audiences\" : \"35\"} ,' +
                                         '{ \"palyID\" : \"othello\" , \"audiences\" : \"40\"}  ] }';
 var plays = JSON.parse(plays_json);
+var invoice = JSON.parse(invoice_json);
 $(function(){
     $(".result").bind("click" , function () {
 
@@ -46,10 +47,10 @@ function statement(invoice , plays){
     return result;
 }
 
-function amountFor(aPerformances , play){
+function amountFor(aPerformances ){
     let result = 0;
 
-    switch (play.type) {
+    switch (playFor(aPerformances).type) {
         case "tragedy" :
             result = 40000;
             if( aPerformances.audiences > 30 ){
@@ -65,7 +66,7 @@ function amountFor(aPerformances , play){
             result += 300 * aPerformances.audiences;
             break;
         default :
-            throw new Error('unknown type ' + play.type);
+            throw new Error('unknown type ' + playFor(aPerformances).type);
     }
     return result;
 }
