@@ -20,33 +20,51 @@ $(function(){
 
 //计算账单详情
 function statement(invoice , plays){
-    let totalAmount = 0;
-    let volumeCredits = 0;
-    let result = 'Statement for '+invoice.customer+'<br/>';
     //format(23001/100)  结果 $230.01
-    const format = new Intl.NumberFormat("en-Us" , {style : "currency" , currency : "USD" , minimumFractionDigits :2}).format;
+    //临时变量实质上是鼓励你写长而复杂的函数
+    //将临时变量替换为一个明确声明的函数
+    //const format = new Intl.NumberFormat("en-Us" , {style : "currency" , currency : "USD" , minimumFractionDigits :2}).format;
 
+    //拆分循环 移动变量到紧邻循环的位置
+    //计算金额
+    let totalAmount = 0;
+    let result = 'Statement for '+invoice.customer+'<br/>';
     for(let pref of invoice.performances){
-        //const play = playFor(pref);
-        let thisAmount = amountFor(pref , playFor(pref));
-
-        //add colume credits
-        volumeCredits += Math.max(pref.audiences - 30 , 0);
-        //add extra credit for every ten comedy attendees 每十位喜剧参加者加上额外学分
-        if("comedy" == playFor(pref).type){
-            volumeCredits += Math.floor(pref.audiences / 5);
-        }
-
-        //print line for this order
-        result +=  playFor(pref).name + ':' + format(thisAmount / 100)  + " (" +  pref.audiences + ') seats <br/>';
-        totalAmount += thisAmount;
+        result +=  playFor(pref).name + ':' + usd(amountFor(pref))  + " (" +  pref.audiences + ') seats <br/>';
+        totalAmount += amountFor(pref);
     }
 
-    result += 'Amount owed is ' + format(totalAmount / 100) + "<br/>";
-    result += 'You earned ' + volumeCredits + ' credits <br/>';
+    //计算积分
+    result += 'Amount owed is ' + usd(totalAmount ) + "<br/>";
+    result += 'You earned ' + totalVolumCredits() + ' credits <br/>';
     return result;
 }
 
+//美元展示
+function usd(aNumber){
+   return new Intl.NumberFormat("en-Us" , {style : "currency" , currency : "USD" , minimumFractionDigits :2}).format(aNumber/ 100);
+}
+
+//计算总积分
+function totalVolumCredits(){
+    let volumeCredits = 0;
+    for(let pref of invoice.performances){
+        volumeCredits += volumeCreditsFor(pref);
+    }
+    return volumeCredits;
+}
+
+//计算积分
+function volumeCreditsFor(aPerformances){
+    let volumeCredits = 0;
+    volumeCredits += Math.max(aPerformances.audiences - 30 , 0);
+    if("comedy" == playFor(aPerformances).type){
+        volumeCredits += Math.floor(aPerformances.audiences / 5);
+    }
+    return volumeCredits;
+}
+
+//计算金额
 function amountFor(aPerformances ){
     let result = 0;
 
