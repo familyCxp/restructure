@@ -88,8 +88,8 @@ function createStatementData(invoice , plays){
     const result = {};
     result.customer = invoice.customer;
     result.performances = invoice.performances.map(enrichPerformance);
-    result.totalAmount = totalAmount(statamentData);
-    result.totalVolumeCredits = totalVolumCredits(statamentData);
+    result.totalAmount = totalAmount(result);
+    result.totalVolumeCredits = totalVolumCredits(result);
     return result;
 
     //返回参数的浅副本  作为中转数据结构
