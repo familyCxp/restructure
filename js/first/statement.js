@@ -12,7 +12,12 @@ var plays = JSON.parse(plays_json);
 var invoice = JSON.parse(invoice_json);
 $(function(){
     $(".result").bind("click" , function () {
+        /*alert([1, 2, 3].map((n) => n + 1));
 
+        // Babel 输出： ES5 语法实现的同等功能
+        alert([1, 2, 3].map(function(n) {
+            return n + 1;
+        }));*/
         $("#result").html( htmlStatement(invoice  , plays ) );
     });
 });
