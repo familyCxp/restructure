@@ -35,7 +35,7 @@ function renderHtml(data){
         result += '<tr><td>'+pref.play.name+'</td><td>'+pref.audiences+'</td><td>'+usd(pref.amount)+'</td></tr>';
     }
     result += '</table>';
-    result += '<p>Amount owed is <em>'+data.totalAmount+'</em></p>';
+    result += '<p>Amount owed is <em>'+usd(data.totalAmount)+'</em></p>';
     result += '<p>You earned <em>'+data.totalVolumeCredits+'</em> credits</p>';
     return result;
 }
